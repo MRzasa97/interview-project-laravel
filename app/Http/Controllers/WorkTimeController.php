@@ -21,7 +21,7 @@ class WorkTimeController extends Controller
         return response()->json(['message' => $message], 200);
     }
 
-    public function summary(Request $request)
+    public function summary(WorkTimeRequest $request)
     {
         $message = $this->workTimeService->getWorkTimeSummary(
             $request->input('employee_id'),
