@@ -2,5 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Middleware\RemoveTrailingSlash;
 
-Route::post('/create', [EmployeeController::class, 'create'])->name('employee.create');
+Route::middleware([RemoveTrailingSlash::class])
+->prefix('employees')
+->group(function() {
+    Route::post('/create', [EmployeeController::class, 'create'])->name('employee.create');
+});
