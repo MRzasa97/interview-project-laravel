@@ -50,8 +50,35 @@ class WorkTimeService implements WorkTimeServiceInterface
 
     public function getWorkTimeSummary(string $employeeId, string $date): array
     {
+        $workTimes = WorkTime::where('employee_id', $employeeId)
+        ->where('start_day', 'like', $date . '%')
+        ->get();
+
+        $sumHoursWorked = 0;
+        foreach($workTimes as $workTime)
+        {
+            $start_time = new \DateTime($workTime->start_time);
+            $end_time = new \DateTime($workTime->end_time);
+            $interval = $start_time->diff($end_time);
+            $minutesWorked = ($interval->days * 24 * 60) + ($interval->h * 60) + $interval->i;
+
+            $roundedMinutes = round($minutesWorked / 30) * 30;
+
+            $hoursWorked = $roundedMinutes / 60;
+
+            $sumHoursWorked += $hoursWorked;
+        }
+
+        $standardWorkHours = min($sumHoursWorked, $this->monthlyWorkHours);
+        $overTimeWorkHours = max($sumHoursWorked - $this->monthlyWorkHours, 0);
+        $payment = ($standardWorkHours * $this->standardWorkRate) + ($overTimeWorkHours * ($this->standardWorkRate * $this->overTimeMultiplier));
+
         return [
-            'message' => 'test'
+            'employee_id' => $employeeId,
+            'hours_worked' => $sumHoursWorked,
+            'total_payment' => $payment,
+            'standard_hours' => $standardWorkHours,
+            'overtime_hours' => $overTimeWorkHours
         ];
     }
 }
