@@ -16,4 +16,5 @@ Route::prefix('worktimes')
 ->middleware([RemoveTrailingSlash::class, IsJsonRequest::class])
 ->group(function(){
     Route::post('/register', [WorkTimeController::class, 'register'])->name('worktime.register');
+    Route::get('/summary', [WorkTimeController::class, 'summary'])->name('worktime.summary');
 });

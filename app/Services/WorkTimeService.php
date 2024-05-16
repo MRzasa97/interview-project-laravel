@@ -47,4 +47,11 @@ class WorkTimeService implements WorkTimeServiceInterface
         
         return 'Work time registered!';
     }
+
+    public function getWorkTimeSummary(string $employeeId, string $date): array
+    {
+        return [
+            'message' => 'test'
+        ];
+    }
 }
