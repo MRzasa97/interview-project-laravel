@@ -22,12 +22,12 @@ class WorkTimeService implements WorkTimeServiceInterface
     public function registerWorkTime(array $data): string
     {
         $startTime = \DateTime::createFromFormat('Y-m-d H:i', $data['start_time']);
-        $endTime = \DateTime::createFromFormat('Y-m-d', $data['end_time']);
+        $endTime = \DateTime::createFromFormat('Y-m-d H:i', $data['end_time']);
         $startDay = $startTime->format('Y-m-d');
 
         if(WorkTime::where('employee_id', $data['employee_id'])->where('start_day', $startDay)->exists())
         {
-            throw ValidationException::withMessages(['start_time' => 'Work time for this employee already registered']);
+            throw ValidationException::withMessages(['start_time' => 'Work time for this employee already registered for this date!']);
         }
 
         $interval = $startTime->diff($endTime);

@@ -12,4 +12,8 @@ Route::middleware([RemoveTrailingSlash::class, IsJsonRequest::class])
     Route::post('/create', [EmployeeController::class, 'create'])->name('employee.create');
 });
 
-Route::post('/register', [WorkTimeController::class, 'register'])->name('worktime.register');
+Route::prefix('worktimes')
+->middleware([RemoveTrailingSlash::class, IsJsonRequest::class])
+->group(function(){
+    Route::post('/register', [WorkTimeController::class, 'register'])->name('worktime.register');
+});
