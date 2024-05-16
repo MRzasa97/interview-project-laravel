@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\WorkTimeRequest;
 use App\Services\Interfaces\WorkTimeServiceInterface;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,7 @@ class WorkTimeController extends Controller
     {
     }
 
-    public function register(Request $request)
+    public function register(WorkTimeRequest $request)
     {
         $message = $this->workTimeService->registerWorkTime($request->all());
         
